@@ -18,18 +18,17 @@ class Frame:
     }
 
     def __init__(
-        self, height: int, width: int, data: str = "", style: Dict[str, str] = DEFAULT
+        self, height: int, width: int, style: Dict[str, str] = DEFAULT
     ) -> None:
         """Data required to create a frame, including custom styling parts"""
 
         self.frame_height = height
         self.frame_width = width
-        self.frame_data = data if data is not None else ""
         self.style = style
         self.__frame_data_text = []
         self.__frame_data_row = []
 
-    def add_data(self, text: str, row: int, position: str = "") -> None:
+    def add_content(self, text: str, row: int, position: str = "") -> None:
         """Add data to total list of text to display on the terminal screen"""
         if not row >= self.frame_height:
             self.__frame_data_text.append(text)
@@ -41,6 +40,11 @@ class Frame:
                 )
             )
             sys.exit(1)
+
+    def remove_content(self):
+        """Clears all of data inside the frame"""
+        self.__frame_data_text = []
+        self.__frame_data_row = []
 
     def print_gathered_data(self) -> None:
         """Return to the user list of given input and its coresponding row"""
@@ -83,7 +87,7 @@ class Frame:
 
 if __name__ == "__main__":
     frame: Frame = Frame(height=4, width=10)
-    frame.add_data(row=1, text="test")
-    frame.add_data(row=2, text="test1")
+    frame.add_content(row=1, text="test")
+    frame.add_content(row=2, text="test1")
     frame.display_frame()
     frame.print_gathered_data()

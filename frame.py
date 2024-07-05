@@ -31,14 +31,13 @@ class Frame:
 
     def add_data(self, text: str, row: int, position: str = "") -> None:
         """Add data to total list of text to display on the terminal screen"""
-        if row < self.frame_width - 2:
+        if not row >= self.frame_height:
             self.__frame_data_text.append(text)
             self.__frame_data_row.append(row)
         else:
             print(
                 error(
-                    f"Error: text too long to fit into the frame: {len(text)} recieved"
-                    f", can fit text of lenght: {self.frame_width}"
+                    f"Error: given row '{row}' for input '{text}' won't fit inside frame "
                 )
             )
             sys.exit(1)

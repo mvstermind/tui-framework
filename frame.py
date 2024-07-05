@@ -1,8 +1,10 @@
+from re import error
 from typing import Dict
+import sys
 
 
 class Frame:
-    STYLE: Dict[str, str] = {
+    DEFAULT: Dict[str, str] = {
         "horizontal": "━",
         "vertical": "┃",
         "top-left": "┏",
@@ -13,13 +15,30 @@ class Frame:
     }
 
     def __init__(
-        self, height: int, width: int, data: str = "", style: Dict[str, str] = STYLE
+        self, height: int, width: int, data: str = "", style: Dict[str, str] = DEFAULT
     ) -> None:
         """Data required to create a frame, including custom styling parts"""
         self.frame_height = height
         self.frame_width = width
         self.frame_data = data
         self.style = style
+        self.frame_data_list = []
+
+    def add_data(self, text: str, row: int):
+        """adds data to total list of things for display"""
+        if row < self.frame_width - 2:
+            self.frame_data_list.append({row: text})
+        else:
+            print(
+                error(
+                    f"Error: text too long to fit into the frame: {len(text)} recieved"
+                    f", can fit text of lenght: {self.frame_width}"
+                )
+            )
+            sys.exit(1)
+
+    def print_gathered_data(self):
+        print(self.frame_data_list)
 
     def display_frame(self):
         """Create frame using components from __init__"""
@@ -49,5 +68,8 @@ class Frame:
 
 
 if __name__ == "__main__":
-    frame: Frame = Frame(height=4, width=10)
+    frame: Frame = Frame(height=4, width=1)
+    frame.add_data(row=3, text="teksciwo")
+    frame.add_data(row=1, text="chujajaja")
     frame.display_frame()
+    frame.print_gathered_data()

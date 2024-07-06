@@ -11,10 +11,10 @@ class Frame:
     DEFAULT: Dict[str, str] = {
         "horizontal": "━",
         "vertical": "┃",
-        "top-left": "┏",
-        "top-right": "┓",
-        "bottom-left": "┗",
-        "bottom-right": "┛",
+        "top_left": "┏",
+        "top_right": "┓",
+        "bottom_left": "┗",
+        "bottom_right": "┛",
     }
 
     def __init__(
@@ -28,11 +28,12 @@ class Frame:
         self.__frame_data_text = []
         self.__frame_data_row = []
 
-    def add_content(self, text: str, row: int, position: str = "") -> None:
+    def add_content(self, text: str, row: int, position: str = "left") -> None:
         """Add data to total list of text to display on the terminal screen"""
         if not row >= self.frame_height:
             self.__frame_data_text.append(text)
             self.__frame_data_row.append(row)
+            self.position = position  # left, center, right avilable
         else:
             print(
                 error(
@@ -55,6 +56,14 @@ class Frame:
 
     def display_frame(self) -> None:
         """Create and display frame using components from __init__"""
+        if self.position == "left" or None:
+            self.__left_align()
+
+        elif self.position == "center":
+            self.__center()
+
+    # row aligmnent methods
+    def __left_align(self):
         self.__print_top_part()
 
         for row in range(self.frame_height):
@@ -72,22 +81,59 @@ class Frame:
 
         self.__print_bot_part()
 
+    def __center(self): ...
+
+    # frame building components
     def __print_top_part(self) -> None:
         """display top part of the frame to the screen"""
-        print(self.style["top-left"], end="")
+        print(self.style["top_left"], end="")
         print(self.style["horizontal"] * self.frame_width, end="")
-        print(self.style["top-right"])
+        print(self.style["top_right"])
 
     def __print_bot_part(self) -> None:
         """display bottom part of the frame on the screen"""
-        print(self.style["bottom-left"], end="")
-        print("━" * self.frame_width, end="")
-        print(self.style["bottom-right"])
+        print(self.style["bottom_left"], end="")
+        print(self.style["horizontal"] * self.frame_width, end="")
+        print(self.style["bottom_right"])
+
+    # customize style
+    def custom_style(
+        self,
+        horizontal: str,
+        vertical: str,
+        top_left: str,
+        top_right: str,
+        bottom_left: str,
+        bottom_right: str,
+        corners="",
+    ):
+        """Create custom style for changing view of displayed frame"""
+        self.style = {
+            "horizontal": horizontal,
+            "vertical": vertical,
+            "top_left": top_left,
+            "top_right": top_right,
+            "bottom_left": bottom_left,
+            "bottom_right": bottom_right,
+            "corners": corners,
+        }
+
+    def clear_style(self):
+        """Chanegs custom made style to default one"""
+        self.style = self.DEFAULT
 
 
 if __name__ == "__main__":
     frame: Frame = Frame(height=4, width=10)
     frame.add_content(row=1, text="test")
     frame.add_content(row=2, text="test1")
+    frame.custom_style(
+        horizontal="0",
+        vertical="o",
+        top_left="*",
+        bottom_right="*",
+        top_right="*",
+        bottom_left="*",
+    )
+    frame.clear_style()
     frame.display_frame()
-    frame.print_gathered_data()

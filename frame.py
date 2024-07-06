@@ -59,7 +59,7 @@ class Frame:
         if self.position == "left" or None:
             self.__left_align()
 
-        elif self.position == "center":
+        if self.position == "center":
             self.__center()
 
     # row aligmnent methods
@@ -81,7 +81,25 @@ class Frame:
 
         self.__print_bot_part()
 
-    def __center(self): ...
+    def __center(self):
+        self.__print_top_part()
+
+        for row in range(self.frame_height):
+            print(self.style["vertical"], end="")
+
+            if row in self.__frame_data_row:
+                text_index = self.__frame_data_row.index(row)
+                text = self.__frame_data_text[text_index]
+                padding_left = (self.frame_width - len(text)) // 2
+                padding_right = self.frame_width - len(text) - padding_left
+                print(" " * padding_left, end="")
+                print(text, end="")
+                print(" " * padding_right, end="")
+                print(self.style["vertical"])
+            else:
+                print(" " * self.frame_width, end="")
+                print(self.style["vertical"])
+        self.__print_bot_part()
 
     # frame building components
     def __print_top_part(self) -> None:
@@ -125,15 +143,14 @@ class Frame:
 
 if __name__ == "__main__":
     frame: Frame = Frame(height=4, width=10)
-    frame.add_content(row=1, text="test")
-    frame.add_content(row=2, text="test1")
-    frame.custom_style(
-        horizontal="0",
-        vertical="o",
-        top_left="*",
-        bottom_right="*",
-        top_right="*",
-        bottom_left="*",
-    )
-    frame.clear_style()
+    frame.add_content(row=1, text="test", position="center")
+    # frame.custom_style(
+    #     horizontal="0",
+    #     vertical="o",
+    #     top_left="*",
+    #     bottom_right="*",
+    #     top_right="*",
+    #     bottom_left="*",
+    # )
+    # frame.clear_style()
     frame.display_frame()

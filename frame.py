@@ -30,10 +30,15 @@ class Frame:
 
     def add_content(self, text: str, row: int, position: str = "left") -> None:
         """Add data to total list of text to display on the terminal screen"""
+        self.position = position  # left, center, right avilable
         if not row >= self.frame_height:
-            self.__frame_data_text.append(text)
+            if self.position == "center":
+                self.__frame_data_text.append(self.__center(text))
+            elif self.position == "right":
+                self.__frame_data_text.append(self.__right(text))
+            else:
+                self.__frame_data_text.append(self.__left(text))
             self.__frame_data_row.append(row)
-            self.position = position  # left, center, right avilable
         else:
             print(
                 error(
@@ -64,13 +69,6 @@ class Frame:
             if row in self.__frame_data_row:
                 text_index = self.__frame_data_row.index(row)
                 text = self.__frame_data_text[text_index]
-                if self.position == "center":
-                    text = self.__center(text)
-                elif self.position == "right":
-                    text = self.__right(text)
-                # if it's not left or right aligned then it must be left
-                else:
-                    text = self.__left(text)
                 print(text, end="")
                 print(" " * (self.frame_width - len(text)), end="")
                 print(self.style["vertical"])
@@ -140,9 +138,9 @@ class Frame:
 
 
 if __name__ == "__main__":
-    frame: Frame = Frame(height=4, width=10)
-    frame.add_content(row=1, text="test", position="center")
-    frame.add_content(row=2, text="test", position="left")
+    frame: Frame = Frame(height=6, width=15)
+    frame.add_content(row=1, text="chupie chuj", position="center")
+    frame.add_content(row=3, text="chupie chuj")
     # frame.custom_style(
     #     horizontal="0",
     #     vertical="o",

@@ -30,11 +30,10 @@ class Frame:
 
     def add_content(self, text: str, row: int, position: str = "left") -> None:
         """Add data to total list of text to display on the terminal screen"""
-        self.position = position  # left, center, right avilable
         if not row >= self.frame_height:
-            if self.position == "center":
+            if position == "center":
                 self.__frame_data_text.append(self.__center(text))
-            elif self.position == "right":
+            elif position == "right":
                 self.__frame_data_text.append(self.__right(text))
             else:
                 self.__frame_data_text.append(self.__left(text))
@@ -94,7 +93,7 @@ class Frame:
     def __right(self, t: str) -> str:
         total_padding = self.frame_width - len(t)
 
-        centered_text = f"{t}{' ' * total_padding}"
+        centered_text = f"{' ' * total_padding}{t}"
         return centered_text
 
     # frame building components
@@ -139,8 +138,8 @@ class Frame:
 
 if __name__ == "__main__":
     frame: Frame = Frame(height=6, width=15)
-    frame.add_content(row=1, text="chupie chuj", position="center")
-    frame.add_content(row=3, text="chupie chuj")
+    frame.add_content(row=1, text="center", position="center")
+    frame.add_content(row=2, text="nie", position="right")
     # frame.custom_style(
     #     horizontal="0",
     #     vertical="o",
